@@ -107,6 +107,15 @@ static void n_tty_set_room(struct tty_struct *tty)
 	} else
 		left = N_TTY_BUF_SIZE - tty->read_cnt - 1;
 
+	/* tty->read_cnt is not read locked ? */
+	if (I_PARMRK(tty)) {
+		/* Multiply read_cnt by 3, since each byte might take up to
+		 * three times as many spaces when PARMRK is set (depending on
+		 * its flags, e.g. parity error). */
+		left = N_TTY_BUF_SIZE - tty->read_cnt * 3 - 1;
+	} else
+		left = N_TTY_BUF_SIZE - tty->read_cnt - 1;
+
 	/*
 	 * If we are doing input canonicalization, and there are no
 	 * pending newlines, let characters through without limit, so
