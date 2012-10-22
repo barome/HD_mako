@@ -634,7 +634,7 @@ static ssize_t show_dvfs_test(struct cpufreq_policy *policy, char *buf)
 	return policy->governor->show_dvfs_test(policy, buf);
 }
 /**
- * show_scaling_driver - show the current cpufreq HW/BIOS limitation
+ * show_bios_limit - show the current cpufreq HW/BIOS limitation
  */
 static ssize_t show_bios_limit(struct cpufreq_policy *policy, char *buf)
 {
