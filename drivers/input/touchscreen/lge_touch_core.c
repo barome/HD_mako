@@ -853,6 +853,11 @@ static void touch_input_report(struct lge_touch_data *ts)
 
 static void touch_boost(void)
 {
+#ifdef CONFIG_TOUCHSCREEN_SWEEP2WAKE
+	if (scr_suspended)
+		return;
+#endif
+
 	if (boosted_time) {
 		mako_boosted = 1;
 		mod_timer(&boost_timer, jiffies + msecs_to_jiffies(boosted_time));
