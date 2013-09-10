@@ -859,6 +859,17 @@ static void dbs_check_cpu(struct cpu_dbs_info_s *this_dbs_info)
 	load_at_max_freq = (cur_load * policy->cur)/policy->cpuinfo.max_freq;
 
 	cpufreq_notify_utilization(policy, load_at_max_freq);
+
+	/* Check for frequency boost */
+	if (mako_boosted && policy->cpu == 0) {
+		if (dbs_tuners_ins.input_boost &&
+				policy->cur < dbs_tuners_ins.input_boost)
+			dbs_freq_increase(policy, dbs_tuners_ins.input_boost);
+		else
+			dbs_freq_increase(policy, policy->max);
+		return;
+	}
+
 	/* Check for frequency increase */
 	if (max_load_freq > dbs_tuners_ins.up_threshold * policy->cur) {
 		/* If switching to max speed, apply sampling_down_factor */
@@ -906,6 +917,13 @@ static void dbs_check_cpu(struct cpu_dbs_info_s *this_dbs_info)
 				(dbs_tuners_ins.up_threshold -
 				 dbs_tuners_ins.down_differential);
 
+		if (mako_boosted && policy->cpu == 0) {
+			if (dbs_tuners_ins.input_boost &&
+					freq_next < dbs_tuners_ins.input_boost)
+				freq_next = dbs_tuners_ins.input_boost;
+			else
+				freq_next = policy->max;
+		}
 		/* No longer fully busy, reset rate_mult */
 		this_dbs_info->rate_mult = 1;
 
