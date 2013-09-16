@@ -30,6 +30,8 @@
 #include <linux/mutex.h>
 #include <linux/syscore_ops.h>
 
+#include <mach/cpufreq.h>
+
 #include <trace/events/power.h>
 
 /**
@@ -1860,6 +1862,8 @@ static int __cpufreq_set_policy(struct cpufreq_policy *data,
 
 	data->min = policy->min;
 	data->max = policy->max;
+
+	msm_cpufreq_set_freq_limits(policy->cpu, policy->min, policy->max);
 
 	pr_debug("new min and max freqs are %u - %u kHz\n",
 					data->min, data->max);
