@@ -1879,11 +1879,9 @@ static int __cpufreq_set_policy(struct cpufreq_policy *data,
 
 			pr_debug("governor switch\n");
 
-			unlock_policy_rwsem_write(data->cpu);
 			/* end old governor */
 			if (data->governor)
 				__cpufreq_governor(data, CPUFREQ_GOV_STOP);
-			lock_policy_rwsem_write(data->cpu);
 
 			/* start new governor */
 			data->governor = policy->governor;
