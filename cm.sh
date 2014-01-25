@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export LOCALVERSION="-"`echo Color-V5+`
+export LOCALVERSION="-"`echo Sema V2.0.2-Color-V6+`
 export CROSS_COMPILE=~/toolchain/bin/arm-eabi-
 export ARCH=arm
 export SUBARCH=arm
