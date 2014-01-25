@@ -33,7 +33,6 @@ static struct dsi_buf lgit_tx_buf;
 static struct dsi_buf lgit_rx_buf;
 static struct msm_fb_data_type *local_mfd;
 static int skip_init;
-static int lcd_isactive = 0;
 
 #define DSV_ONBST 57
 
@@ -230,33 +229,16 @@ struct syscore_ops panel_syscore_ops = {
 
 /* --------------- sysfs -------------------- */
 
-static void update_power_data(int index, unsigned int *gamma)
+static inline void update_power_data(int index, unsigned int *gamma)
 {
 	struct dsi_cmd_desc *pos;
 	int i;
-	int ret = 0;
 
 	pos = mipi_lgit_pdata->power_on_set_1;
 	for (i = 0; i < 9; i++) {
 		pos[index].payload[i + 1] = gamma[i];
 		pos[index + 1].payload[i + 1] = gamma[i];
 	}
-
-	/*
-	 * Only attempt to apply if the LCD is active.
-	 * If it isn't, the device will panic-reboot
-	 */
-	if (lcd_isactive) {
-		MIPI_OUTP(MIPI_DSI_BASE + 0x38, 0x10000000);
-		ret = mipi_dsi_cmds_tx(&lgit_tx_buf, pos,
-					mipi_lgit_pdata->power_on_set_size_1);
-		MIPI_OUTP(MIPI_DSI_BASE + 0x38, 0x14000000);
-		if (ret < 0)
-			pr_err("%s: failed to transmit power_on_set_1 cmds\n",
-				__func__);
-	} else
-		pr_warn("%s: Tried to apply gamma settings when LCD was off\n",
-			__func__);
 }
 
 static inline int make_buf(int index, char *buf)
