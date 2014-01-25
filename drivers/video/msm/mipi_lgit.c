@@ -126,8 +126,6 @@ static int mipi_lgit_lcd_on(struct platform_device *pdev)
 		return ret;
 	}
 
-	lcd_isactive = 1;
-
 	pr_info("%s finished\n", __func__);
 	return 0;
 }
@@ -138,8 +136,6 @@ static int mipi_lgit_lcd_off(struct platform_device *pdev)
 	int ret = 0;
 
 	pr_info("%s started\n", __func__);
-	
-	lcd_isactive = 0;
 
 	if (mipi_lgit_pdata->bl_pwm_disable)
 		mipi_lgit_pdata->bl_pwm_disable();
