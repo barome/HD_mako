@@ -9,6 +9,7 @@ export KBUILD_BUILD_HOST="me.com"
 echo
 git checkout semaphore-cm11
 make clean
+make mrproper
 echo "Making semaphore_mako_defconfig"
 DATE_START=$(date +"%s")
 
