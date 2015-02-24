@@ -3501,3 +3501,5 @@ CONFIG_DQL=y
 CONFIG_NLATTR=y
 # CONFIG_AVERAGE is not set
 # CONFIG_CORDIC is not set
+# CONFIG_MMC_TEST is not set
+# MMC_BLOCK_TEST is not set
